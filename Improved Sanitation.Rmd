@@ -1,0 +1,53 @@
+---
+title: "Improved Sanitation in South Asia"
+author: "Azmath Shamrad"
+date: "Monday, October 27, 2014"
+output: html_document
+---
+
+Data source: Gapminder
+
+
+```{r}
+echo = TRUE
+library(ggplot2)
+library('reshape2')
+setwd(getwd())
+sanitation<-melt(t(read.csv('Improved_sanitation.csv', na.strings="NA", header=T, 
+                      row.names=1, blank.lines.skip=T)))
+names(sanitation) <- c("Year", "Country", "Pc")
+sanitation$Year <- sub("X", "", sanitation$Year)
+
+ggplot(aes(x=Year, y=Pc, group = Country, color = Country)
+       ,data=subset(sanitation, 
+                    (Country=='Sri Lanka'|
+                       Country=='India'|
+                       Country=='Pakistan'|
+                       Country=='Bangladesh'|
+                       Country=='Nepal'|
+                       Country=='Afghanistan'|
+                       Country=='Bhutan'|
+                       Country=='Maldives'))) + 
+  geom_line()+
+  geom_point()+
+  scale_y_discrete(breaks=seq(0,100,5)) +
+  ylab("Percentage")+
+  ggtitle("Improved sanitation in South Asia")
+```
+
+```{r}
+ggplot(aes(x=Country, y=Pc, group = Country, color = Country)
+       ,data=subset(sanitation, 
+                    (Country=='Sri Lanka'|
+                       Country=='India'|
+                       Country=='Pakistan'|
+                       Country=='Bangladesh'|
+                       Country=='Nepal'|
+                       Country=='Afghanistan'|
+                       Country=='Bhutan'|
+                       Country=='Maldives'))) + 
+  geom_boxplot() +
+  scale_y_discrete(breaks=seq(0,100,5)) +
+  ylab("Percentage") +
+  ggtitle("Improved sanitation in South Asia - Boxplot")
+```
